@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">NewsFeed</string>
+    <string name="title_holder">This is a really long title that can take a lot of space</string>
+    <string name="section_holder">This is a sample section</string>
+    <string name="date_holder">August 1, 2018</string>
+    <string name="time_holder">12:00 PM</string>
+    <string name="author_holder">JustThe LongName</string>
+</resources>
