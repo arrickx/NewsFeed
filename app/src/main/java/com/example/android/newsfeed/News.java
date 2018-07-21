@@ -37,27 +37,27 @@ public class News {
     }
 
     /** Return the title of the news article */
-    public String getmTitle() {
+    public String getTitle() {
         return mTitle;
     }
 
     /** Return the section of the news article */
-    public String getmSection() {
+    public String getSection() {
         return mSection;
     }
 
     /** Return the author of the news article */
-    public String getmAuthor() {
+    public String getAuthor() {
         return mAuthor;
     }
 
     /** Return the publish time of the news article */
-    public String getmPublishTime() {
+    public String getPublishTime() {
         return mPublishTime;
     }
 
     /** Return the url of the news article */
-    public String getmUrl() {
+    public String getUrl() {
         return mUrl;
     }
 }
