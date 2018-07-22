@@ -1,6 +1,7 @@
 package com.example.android.newsfeed;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import java.util.Date;
 import java.util.List;
 
 public class NewsAdapter extends ArrayAdapter<News> {
+
+    /** Tag for the log messages */
+    private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
     public NewsAdapter(Context context, List<News> news) {
         super(context, 0, news);
@@ -37,7 +41,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
         try {
             currentTime = currentFormat.parse(originalTime);
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e(LOG_TAG, "Error with parsing current time", e);
         }
 
         TextView titleView = listItemView.findViewById(R.id.article_title);
@@ -47,7 +51,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
         sectionView.setText(currentNews.getSection());
 
         TextView authorView = listItemView.findViewById(R.id.article_author);
-        authorView.setText(currentNews.getAuthor());
+        authorView.setText(currentNews.getSection());
 
         TextView publishDateView = listItemView.findViewById(R.id.article_date);
         String articleDate = formatDate(currentTime);

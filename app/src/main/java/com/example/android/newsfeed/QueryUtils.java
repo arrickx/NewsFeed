@@ -1,184 +1,190 @@
 package com.example.android.newsfeed;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 
+/** Helper methods related to requesting and receiving news data from Guardian API*/
 public final class QueryUtils {
-    private static final String SAMPLE_JSON_RESPONSE = "{\n" +
-            "    \"response\": {\n" +
-            "        \"status\": \"ok\",\n" +
-            "        \"userTier\": \"developer\",\n" +
-            "        \"total\": 2049484,\n" +
-            "        \"startIndex\": 1,\n" +
-            "        \"pageSize\": 10,\n" +
-            "        \"currentPage\": 1,\n" +
-            "        \"pages\": 204949,\n" +
-            "        \"orderBy\": \"newest\",\n" +
-            "        \"results\": [\n" +
-            "            {\n" +
-            "                \"id\": \"commentisfree/2018/jul/21/designer-babies-gene-editing-curing-disease\",\n" +
-            "                \"type\": \"article\",\n" +
-            "                \"sectionId\": \"commentisfree\",\n" +
-            "                \"sectionName\": \"Opinion\",\n" +
-            "                \"webPublicationDate\": \"2018-07-22T08:00:00Z\",\n" +
-            "                \"webTitle\": \"Fear of dystopian change should not blind us to the potential of gene editing | Kenan Malik\",\n" +
-            "                \"webUrl\": \"https://www.theguardian.com/commentisfree/2018/jul/21/designer-babies-gene-editing-curing-disease\",\n" +
-            "                \"apiUrl\": \"https://content.guardianapis.com/commentisfree/2018/jul/21/designer-babies-gene-editing-curing-disease\",\n" +
-            "                \"isHosted\": false,\n" +
-            "                \"pillarId\": \"pillar/opinion\",\n" +
-            "                \"pillarName\": \"Opinion\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "                \"id\": \"sport/live/2018/jul/21/the-open-2018-third-round-live\",\n" +
-            "                \"type\": \"liveblog\",\n" +
-            "                \"sectionId\": \"sport\",\n" +
-            "                \"sectionName\": \"Sport\",\n" +
-            "                \"webPublicationDate\": \"2018-07-21T17:29:14Z\",\n" +
-            "                \"webTitle\": \"The Open 2018: third round: birdies fly in on moving day – live!\",\n" +
-            "                \"webUrl\": \"https://www.theguardian.com/sport/live/2018/jul/21/the-open-2018-third-round-live\",\n" +
-            "                \"apiUrl\": \"https://content.guardianapis.com/sport/live/2018/jul/21/the-open-2018-third-round-live\",\n" +
-            "                \"isHosted\": false,\n" +
-            "                \"pillarId\": \"pillar/sport\",\n" +
-            "                \"pillarName\": \"Sport\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "                \"id\": \"us-news/2018/jul/21/donald-trump-michael-cohen-tape-playboy-model\",\n" +
-            "                \"type\": \"article\",\n" +
-            "                \"sectionId\": \"us-news\",\n" +
-            "                \"sectionName\": \"US news\",\n" +
-            "                \"webPublicationDate\": \"2018-07-21T17:15:41Z\",\n" +
-            "                \"webTitle\": \"Trump claims Cohen tape may be illegal and insists he did nothing wrong\",\n" +
-            "                \"webUrl\": \"https://www.theguardian.com/us-news/2018/jul/21/donald-trump-michael-cohen-tape-playboy-model\",\n" +
-            "                \"apiUrl\": \"https://content.guardianapis.com/us-news/2018/jul/21/donald-trump-michael-cohen-tape-playboy-model\",\n" +
-            "                \"isHosted\": false,\n" +
-            "                \"pillarId\": \"pillar/news\",\n" +
-            "                \"pillarName\": \"News\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "                \"id\": \"world/2018/jul/21/women-travelling-from-northern-ireland-to-england-for-abortions\",\n" +
-            "                \"type\": \"article\",\n" +
-            "                \"sectionId\": \"world\",\n" +
-            "                \"sectionName\": \"World news\",\n" +
-            "                \"webPublicationDate\": \"2018-07-21T17:02:17Z\",\n" +
-            "                \"webTitle\": \"Rise in women travelling from Northern Ireland to England for abortions\",\n" +
-            "                \"webUrl\": \"https://www.theguardian.com/world/2018/jul/21/women-travelling-from-northern-ireland-to-england-for-abortions\",\n" +
-            "                \"apiUrl\": \"https://content.guardianapis.com/world/2018/jul/21/women-travelling-from-northern-ireland-to-england-for-abortions\",\n" +
-            "                \"isHosted\": false,\n" +
-            "                \"pillarId\": \"pillar/news\",\n" +
-            "                \"pillarName\": \"News\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "                \"id\": \"society/2018/jul/21/may-2bn-council-housing-pledge-not-enough-council-leaders-warn\",\n" +
-            "                \"type\": \"article\",\n" +
-            "                \"sectionId\": \"society\",\n" +
-            "                \"sectionName\": \"Society\",\n" +
-            "                \"webPublicationDate\": \"2018-07-21T17:00:42Z\",\n" +
-            "                \"webTitle\": \"May’s housing cash pledge is not enough, council leaders warn\",\n" +
-            "                \"webUrl\": \"https://www.theguardian.com/society/2018/jul/21/may-2bn-council-housing-pledge-not-enough-council-leaders-warn\",\n" +
-            "                \"apiUrl\": \"https://content.guardianapis.com/society/2018/jul/21/may-2bn-council-housing-pledge-not-enough-council-leaders-warn\",\n" +
-            "                \"isHosted\": false,\n" +
-            "                \"pillarId\": \"pillar/news\",\n" +
-            "                \"pillarName\": \"News\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "                \"id\": \"football/2018/jul/21/shahid-khan-wembley-mark-lamping-england-nfl\",\n" +
-            "                \"type\": \"article\",\n" +
-            "                \"sectionId\": \"football\",\n" +
-            "                \"sectionName\": \"Football\",\n" +
-            "                \"webPublicationDate\": \"2018-07-21T17:00:42Z\",\n" +
-            "                \"webTitle\": \"Shahid Khan keen for Wembley to be a key player either side of the Atlantic\",\n" +
-            "                \"webUrl\": \"https://www.theguardian.com/football/2018/jul/21/shahid-khan-wembley-mark-lamping-england-nfl\",\n" +
-            "                \"apiUrl\": \"https://content.guardianapis.com/football/2018/jul/21/shahid-khan-wembley-mark-lamping-england-nfl\",\n" +
-            "                \"isHosted\": false,\n" +
-            "                \"pillarId\": \"pillar/sport\",\n" +
-            "                \"pillarName\": \"Sport\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "                \"id\": \"books/2018/jul/21/book-interview-gabriel-tallent-q-and-a\",\n" +
-            "                \"type\": \"article\",\n" +
-            "                \"sectionId\": \"books\",\n" +
-            "                \"sectionName\": \"Books\",\n" +
-            "                \"webPublicationDate\": \"2018-07-21T17:00:42Z\",\n" +
-            "                \"webTitle\": \"Gabriel Tallent: ‘I follow my inspiration, however difficult’\",\n" +
-            "                \"webUrl\": \"https://www.theguardian.com/books/2018/jul/21/book-interview-gabriel-tallent-q-and-a\",\n" +
-            "                \"apiUrl\": \"https://content.guardianapis.com/books/2018/jul/21/book-interview-gabriel-tallent-q-and-a\",\n" +
-            "                \"isHosted\": false,\n" +
-            "                \"pillarId\": \"pillar/arts\",\n" +
-            "                \"pillarName\": \"Arts\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "                \"id\": \"commentisfree/2018/jul/21/yes-plastic-is-an-eco-nightmare-but-its-also-tired-old-technology\",\n" +
-            "                \"type\": \"article\",\n" +
-            "                \"sectionId\": \"commentisfree\",\n" +
-            "                \"sectionName\": \"Opinion\",\n" +
-            "                \"webPublicationDate\": \"2018-07-21T17:00:41Z\",\n" +
-            "                \"webTitle\": \"Yes, plastic is an eco nightmare. But it’s also tired, old technology | Lucy Siegle\",\n" +
-            "                \"webUrl\": \"https://www.theguardian.com/commentisfree/2018/jul/21/yes-plastic-is-an-eco-nightmare-but-its-also-tired-old-technology\",\n" +
-            "                \"apiUrl\": \"https://content.guardianapis.com/commentisfree/2018/jul/21/yes-plastic-is-an-eco-nightmare-but-its-also-tired-old-technology\",\n" +
-            "                \"isHosted\": false,\n" +
-            "                \"pillarId\": \"pillar/opinion\",\n" +
-            "                \"pillarName\": \"Opinion\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "                \"id\": \"sport/live/2018/jul/21/tour-de-france-2018-stage-14-live\",\n" +
-            "                \"type\": \"liveblog\",\n" +
-            "                \"sectionId\": \"sport\",\n" +
-            "                \"sectionName\": \"Sport\",\n" +
-            "                \"webPublicationDate\": \"2018-07-21T16:29:00Z\",\n" +
-            "                \"webTitle\": \"Tour de France 2018: Omar Fraile wins stage 14 – as it happened\",\n" +
-            "                \"webUrl\": \"https://www.theguardian.com/sport/live/2018/jul/21/tour-de-france-2018-stage-14-live\",\n" +
-            "                \"apiUrl\": \"https://content.guardianapis.com/sport/live/2018/jul/21/tour-de-france-2018-stage-14-live\",\n" +
-            "                \"isHosted\": false,\n" +
-            "                \"pillarId\": \"pillar/sport\",\n" +
-            "                \"pillarName\": \"Sport\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "                \"id\": \"business/2018/jul/21/philip-hammond-tax-rises-social-care-health-funding\",\n" +
-            "                \"type\": \"article\",\n" +
-            "                \"sectionId\": \"business\",\n" +
-            "                \"sectionName\": \"Business\",\n" +
-            "                \"webPublicationDate\": \"2018-07-21T16:22:34Z\",\n" +
-            "                \"webTitle\": \"Everyone’s bound to be caught in Hammond’s tax rise net | Phillip Inman\",\n" +
-            "                \"webUrl\": \"https://www.theguardian.com/business/2018/jul/21/philip-hammond-tax-rises-social-care-health-funding\",\n" +
-            "                \"apiUrl\": \"https://content.guardianapis.com/business/2018/jul/21/philip-hammond-tax-rises-social-care-health-funding\",\n" +
-            "                \"isHosted\": false,\n" +
-            "                \"pillarId\": \"pillar/news\",\n" +
-            "                \"pillarName\": \"News\"\n" +
-            "            }\n" +
-            "        ]\n" +
-            "    }\n" +
-            "}";
 
+    /** Tag for the log messages */
+    private static final String LOG_TAG = QueryUtils.class.getSimpleName();
+
+    /**
+     * Create a private constructor because no one should ever create a {@link QueryUtils} object.
+     * This class is only meant to hold static variables and methods, which can be accessed
+     * directly from the class name QueryUtils (and an object instance of QueryUtils is not needed).
+     */
     private QueryUtils() {
     }
 
-    public static ArrayList<News> extractNews(){
-        ArrayList<News> news = new ArrayList<>();
+    /**
+     * Query the USGS dataset and return a list of {@link News} objects.
+     */
+    public static List<News> fetchNewsData(String requestUrl) {
+        // Create URL object
+        URL url = createUrl(requestUrl);
 
+        // Perform HTTP request to the URL and receive a JSON response back
+        String jsonResponse = null;
         try {
-            JSONObject baseJsonResponse = new JSONObject(SAMPLE_JSON_RESPONSE);
-            JSONObject thisArray = baseJsonResponse.getJSONObject("response");
-            JSONArray newsArray = thisArray.getJSONArray("results");
-            for (int i = 0; i < newsArray.length(); i++) {
-                JSONObject currentNews = newsArray.getJSONObject(i);
-                String title = currentNews.getString("webTitle");
-                String section = currentNews.getString("sectionName");
-                String author = currentNews.getString("pillarName");
-                String time = currentNews.getString("webPublicationDate");
-                String url = currentNews.getString("webUrl");
-
-                News item = new News(title, section, author, time, url);
-                news.add(item);
-            }
-        } catch (JSONException e){
-            Log.e("QueryUtils","Problem parsing JSON results", e);
+            jsonResponse = makeHttpRequest(url);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
+        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
+        List<News> news = extractFeatureFromJson(jsonResponse);
+
+        // Return the list of {@link Earthquake}s
         return news;
+    }
+
+    /**
+     * Returns new URL object from the given string URL.
+     */
+    private static URL createUrl(String stringUrl) {
+        URL url = null;
+        try {
+            url = new URL(stringUrl);
+        } catch (MalformedURLException e) {
+            Log.e(LOG_TAG, "Problem building the URL ", e);
+        }
+        return url;
+    }
+
+    /**
+     * Make an HTTP request to the given URL and return a String as the response.
+     */
+    private static String makeHttpRequest(URL url) throws IOException {
+        String jsonResponse = "";
+
+        // If the URL is null, then return early.
+        if (url == null) {
+            return jsonResponse;
+        }
+
+        HttpURLConnection urlConnection = null;
+        InputStream inputStream = null;
+        try {
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setReadTimeout(5000 /* milliseconds */);
+            urlConnection.setConnectTimeout(8000 /* milliseconds */);
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            // If the request was successful ,
+            // then read the input stream and parse the response.
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                inputStream = urlConnection.getInputStream();
+                jsonResponse = readFromStream(inputStream);
+            } else {
+                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+            }
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (inputStream != null) {
+                // Closing the input stream could throw an IOException, which is why
+                // the makeHttpRequest(URL url) method signature specifies than an IOException
+                // could be thrown.
+                inputStream.close();
+            }
+        }
+        return jsonResponse;
+    }
+
+    /**
+     * Convert the {@link InputStream} into a String which contains the
+     * whole JSON response from the server.
+     */
+    private static String readFromStream(InputStream inputStream) throws IOException {
+        StringBuilder output = new StringBuilder();
+        if (inputStream != null) {
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String line = reader.readLine();
+            while (line != null) {
+                output.append(line);
+                line = reader.readLine();
+            }
+        }
+        return output.toString();
+    }
+
+    /**
+     * Return a list of {@link News} objects that has been built up from
+     * parsing the given JSON response.
+     */
+    private static List<News> extractFeatureFromJson(String newsJSON) {
+        // If the JSON string is empty or null, then return early.
+        if (TextUtils.isEmpty(newsJSON)) {
+            return null;
+        }
+
+        // Create an empty ArrayList that we can start adding earthquakes to
+        List<News> news = new ArrayList<>();
+            // Try to parse the JSON response string. If there's a problem with the way the JSON
+            // is formatted, a JSONException exception object will be thrown.
+            // Catch the exception so the app doesn't crash, and print the error message to the logs.
+            try {
+                // Create a JSONObject from the JSON response string
+                JSONObject baseJsonResponse = new JSONObject(newsJSON);
+
+                // Extract the JSONArray to locate the data
+                JSONObject thisArray = baseJsonResponse.getJSONObject("response");
+                JSONArray newsArray = thisArray.getJSONArray("results");
+
+                // For each news in the newsArray, create an {@link News} object
+                for (int i = 0; i < newsArray.length(); i++) {
+
+                    // Get a single news at position i within the list of news
+                    JSONObject currentNews = newsArray.getJSONObject(i);
+
+                    // Extract the value for the key called "webTitle"
+                    String title = currentNews.getString("webTitle");
+
+                    // Extract the value for the key called "sectionName"
+                    String section = currentNews.getString("sectionName");
+
+                    // Extract the value for the key called "webPublicationDate"
+                    String time = currentNews.getString("webPublicationDate");
+
+                    // Extract the value for the key called "webUrl"
+                    String url = currentNews.getString("webUrl");
+
+                    // Create a new {@link News} object with the title, section, time
+                    // and url from the JSON response.
+                    News item = new News(title, section, time, url);
+
+                    // Add the new {@link News} to the list of news.
+                    news.add(item);
+                }
+            } catch (JSONException e){
+                // If an error is thrown when executing any of the above statements in the "try" block,
+                // catch the exception here, so the app doesn't crash. Print a log message
+                // with the message from the exception.
+                Log.e("QueryUtils","Problem parsing JSON results", e);
+            }
+
+            // Return the list of news
+            return news;
     }
 }

@@ -24,14 +24,12 @@ public class News {
      *
      * @param title       is the title of the news article
      * @param section     is the section of the news article
-     * @param author      is the author of the news article
      * @param publishTime is the publish time of the news article
      * @param url         is the website URL to find more details about the earthquake
      */
-    public News(String title, String section, String author, String publishTime, String url){
+    public News(String title, String section, String publishTime, String url){
         mTitle = title;
         mSection = section;
-        mAuthor = author;
         mPublishTime = publishTime;
         mUrl = url;
     }
@@ -44,11 +42,6 @@ public class News {
     /** Return the section of the news article */
     public String getSection() {
         return mSection;
-    }
-
-    /** Return the author of the news article */
-    public String getAuthor() {
-        return mAuthor;
     }
 
     /** Return the publish time of the news article */
