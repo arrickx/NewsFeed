@@ -50,33 +50,20 @@ public class NewsAdapter extends ArrayAdapter<News> {
         TextView sectionView = listItemView.findViewById(R.id.article_section);
         sectionView.setText(currentNews.getSection());
 
-        TextView authorView = listItemView.findViewById(R.id.article_author);
-        authorView.setText(currentNews.getSection());
-
         TextView publishDateView = listItemView.findViewById(R.id.article_date);
         String articleDate = formatDate(currentTime);
         publishDateView.setText(articleDate);
 
-        TextView publishTimeView = listItemView.findViewById(R.id.article_time);
-        String articleTime = formatTime(currentTime);
-        publishTimeView.setText(articleTime);
 
         return listItemView;
     }
 
     /**
-     * Return the formatted date string (i.e. "Aug 1, 2018") from a Date object.
+     * Return the formatted date string (i.e. "Aug 1  12:34 PM") from a Date object.
      */
     private String formatDate(Date dateObject) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd   h:mm a");
         return dateFormat.format(dateObject);
     }
 
-    /**
-     * Return the formatted date string (i.e. "1:23 PM") from a Date object.
-     */
-    private String formatTime(Date dateObject) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
-        return timeFormat.format(dateObject);
-    }
 }

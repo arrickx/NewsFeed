@@ -10,9 +10,6 @@ public class News {
     /** Section of the news article */
     private String mSection;
 
-    /** Author of the news article */
-    private String mAuthor;
-
     /** Publish time of the news article */
     private String mPublishTime;
 

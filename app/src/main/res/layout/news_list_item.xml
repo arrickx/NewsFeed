@@ -5,32 +5,24 @@
 
     <LinearLayout style="@style/Vertical1">
 
+        <RelativeLayout style="@style/Horizontal1">
+
+            <TextView
+                android:id="@+id/article_section"
+                style="@style/Section"
+                tools:text="@string/section_holder" />
+
+            <TextView
+                android:id="@+id/article_date"
+                style="@style/Time"
+                tools:text="@string/date_holder" />
+
+        </RelativeLayout>
+
         <TextView
             android:id="@+id/article_title"
             style="@style/Title"
             tools:text="@string/title_holder" />
-
-        <TextView
-            android:id="@+id/article_section"
-            style="@style/Section"
-            tools:text="@string/section_holder" />
     </LinearLayout>
 
-    <LinearLayout style="@style/Vertical2">
-
-        <TextView
-            android:id="@+id/article_author"
-            style="@style/Author"
-            tools:text="@string/author_holder" />
-
-        <TextView
-            android:id="@+id/article_date"
-            style="@style/Time"
-            tools:text="@string/date_holder" />
-
-        <TextView
-            android:id="@+id/article_time"
-            style="@style/Time"
-            tools:text="@string/time_holder" />
-    </LinearLayout>
 </LinearLayout>
