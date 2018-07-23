@@ -4,4 +4,6 @@
     <string name="section_holder">Sample section</string>
     <string name="date_holder">Aug 1  12:34 PM</string>
     <string name="author_holder">JustThe LongName</string>
+    <string name="no_news">No news found right now. Probably something WRONG !</string>
+    <string name="no_internet_connection">No internet connection.</string>
 </resources>

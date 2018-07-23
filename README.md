@@ -1,5 +1,5 @@
 # News Feed App
-> TODO
+> A single page app that gives a user regularly-updated news from the internet related to a particular topic, person, or location. Can access more detail by clicking the item.
 
 
 [![Image](demo.gif)](Image)
@@ -20,8 +20,5 @@
 
 * This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
-
-* **TODO** was provided by [TODO](TODO).
 
 
