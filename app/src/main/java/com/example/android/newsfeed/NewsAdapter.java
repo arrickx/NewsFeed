@@ -54,6 +54,8 @@ public class NewsAdapter extends ArrayAdapter<News> {
         String articleDate = formatDate(currentTime);
         publishDateView.setText(articleDate);
 
+        TextView authorView = listItemView.findViewById(R.id.article_author);
+        authorView.setText(currentNews.getAuthor());
 
         return listItemView;
     }
@@ -62,7 +64,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
      * Return the formatted date string (i.e. "Aug 1  12:34 PM") from a Date object.
      */
     private String formatDate(Date dateObject) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd   h:mm a");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("   LLL dd h:mm a");
         return dateFormat.format(dateObject);
     }
 

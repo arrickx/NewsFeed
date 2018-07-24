@@ -13,6 +13,11 @@
                 tools:text="@string/section_holder" />
 
             <TextView
+                android:id="@+id/article_author"
+                style="@style/Author"
+                tools:text="@string/author_holder" />
+
+            <TextView
                 android:id="@+id/article_date"
                 style="@style/Time"
                 tools:text="@string/date_holder" />

@@ -160,21 +160,28 @@ public final class QueryUtils {
                     // Get a single news at position i within the list of news
                     JSONObject currentNews = newsArray.getJSONObject(i);
 
-                    // Extract the value for the key called "webTitle"
+                    // Extract the value for the title from the key called "webTitle"
                     String title = currentNews.getString("webTitle");
 
-                    // Extract the value for the key called "sectionName"
+                    // Extract the value for the section from the key called "sectionName"
                     String section = currentNews.getString("sectionName");
 
-                    // Extract the value for the key called "webPublicationDate"
+                    // Extract the value for the time from the key called "webPublicationDate"
                     String time = currentNews.getString("webPublicationDate");
 
-                    // Extract the value for the key called "webUrl"
+                    // Extract the value for the URL from the key called "webUrl"
                     String url = currentNews.getString("webUrl");
 
-                    // Create a new {@link News} object with the title, section, time
+                    // Get into a JsonArray and select find the JsonObject at index 0;
+                    JSONArray newsTag = currentNews.getJSONArray("tags");
+                    JSONObject innerTag = newsTag.getJSONObject(0);
+
+                    // Extract the value for the author from the key called "webTitle"
+                    String author = innerTag.getString("webTitle");
+
+                    // Create a new {@link News} object with the title, section, time, author
                     // and url from the JSON response.
-                    News item = new News(title, section, time, url);
+                    News item = new News(title, section, time, url, author);
 
                     // Add the new {@link News} to the list of news.
                     news.add(item);

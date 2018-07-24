@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     /**
      * URL for news data from the Guardian API
      */
-    private static final String NEWS_REQUEST_URL = "https://content.guardianapis.com/search?api-key=7f3792f1-18ac-465d-9193-65cae2490570";
+    private static final String NEWS_REQUEST_URL = "https://content.guardianapis.com/search?&show-tags=contributor&api-key=7f3792f1-18ac-465d-9193-65cae2490570";
 
     /**
      * Constant value for the news loader ID. We can choose any integer.
