@@ -14,7 +14,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class NewsAdapter extends ArrayAdapter<News> {
+
+    /** Bind View using Butter Knife for better readability */
+    @BindView(R.id.article_title) TextView title;
+    @BindView(R.id.article_author) TextView author;
+    @BindView(R.id.article_date) TextView date;
+    @BindView(R.id.article_section) TextView section;
 
     /** Tag for the log messages */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
@@ -23,15 +32,19 @@ public class NewsAdapter extends ArrayAdapter<News> {
         super(context, 0, news);
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         View listItemView = convertView;
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.news_list_item, parent, false);
         }
 
+        // Access Bind View for this View*
+        ButterKnife.bind(this, listItemView);
+
+        // Get current position of the news
         News currentNews = getItem(position);
 
         //find the date and time of it;
@@ -44,19 +57,20 @@ public class NewsAdapter extends ArrayAdapter<News> {
             Log.e(LOG_TAG, "Error with parsing current time", e);
         }
 
-        TextView titleView = listItemView.findViewById(R.id.article_title);
-        titleView.setText(currentNews.getTitle());
+        // Set the title
+        title.setText(currentNews.getTitle());
 
-        TextView sectionView = listItemView.findViewById(R.id.article_section);
-        sectionView.setText(currentNews.getSection());
+        // Set the section name
+        section.setText(currentNews.getSection());
 
-        TextView publishDateView = listItemView.findViewById(R.id.article_date);
+        // Get the formatted date and use it
         String articleDate = formatDate(currentTime);
-        publishDateView.setText(articleDate);
+        date.setText(articleDate);
 
-        TextView authorView = listItemView.findViewById(R.id.article_author);
-        authorView.setText(currentNews.getAuthor());
+        // Set the author name
+        author.setText(currentNews.getAuthor());
 
+        // Return the ListItem for display
         return listItemView;
     }
 

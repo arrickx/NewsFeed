@@ -1,38 +1,50 @@
 package com.example.android.newsfeed;
 
+import android.app.LoaderManager;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.app.LoaderManager;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Loader;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<News>> {
+
+    /** Bind View using Butter Knife for better readability */
+    @BindView(R.id.list) ListView newsListView;
+    @BindView(R.id.empty_view) TextView mEmptyStateTextView;
+    @BindString(R.string.no_internet_connection) String noConnection;
+    @BindString(R.string.no_news) String noNews;
+
+    /**
+     * access the Guardian API from build.gradle
+     */
+    private static final String apiKey = BuildConfig.API_KEY;
 
     /**
      * URL for news data from the Guardian API
      */
-    private static final String NEWS_REQUEST_URL = "https://content.guardianapis.com/search?&show-tags=contributor&api-key=7f3792f1-18ac-465d-9193-65cae2490570";
+    private static final String NEWS_REQUEST_URL = "https://content.guardianapis.com/search?&show-tags=contributor&api-key="+apiKey;
 
     /**
      * Constant value for the news loader ID. We can choose any integer.
      * This really only comes into play if you're using multiple loaders.
      */
     private static final int NEWS_LOADER_ID = 1;
-
-    /** TextView that is displayed when the list is empty */
-    private TextView mEmptyStateTextView;
 
     /**
      * Adapter for the list of news
@@ -44,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Find a reference to the {@link ListView} in the layout
-        ListView newsListView = findViewById(R.id.list);
+        // Access Bind View for this View*
+        ButterKnife.bind(this);
 
         // Create a new adapter that takes the list of news as input
         mAdapter = new NewsAdapter(this, new ArrayList<News>());
@@ -53,9 +65,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         newsListView.setAdapter(mAdapter);
-
-        // Find a reference to the {@link TextView} in the layout
-        mEmptyStateTextView = findViewById(R.id.empty_view);
 
         // Set to display empty view if nothing shows.
         newsListView.setEmptyView(mEmptyStateTextView);
@@ -102,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             loadingIndicator.setVisibility(View.GONE);
 
             // Update empty state with no connection error message
-            mEmptyStateTextView.setText(R.string.no_internet_connection);
+            mEmptyStateTextView.setText(noConnection);
         }
     }
 
@@ -119,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         loadingIndicator.setVisibility(View.GONE);
 
         // Set empty state text to display specific message.
-        mEmptyStateTextView.setText(R.string.no_news);
+        mEmptyStateTextView.setText(noNews);
 
         // Clear the adapter of previous data
         mAdapter.clear();

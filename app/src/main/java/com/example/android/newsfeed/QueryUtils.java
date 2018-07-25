@@ -24,6 +24,10 @@ public final class QueryUtils {
     /** Tag for the log messages */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
+    /** Create integer for the timeout, time in milliseconds */
+    private static final int readTimeout = 5000;
+    private static final int connectTimeout = 8000;
+
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
      * This class is only meant to hold static variables and methods, which can be accessed
@@ -82,8 +86,8 @@ public final class QueryUtils {
         InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(5000 /* milliseconds */);
-            urlConnection.setConnectTimeout(8000 /* milliseconds */);
+            urlConnection.setReadTimeout(readTimeout);
+            urlConnection.setConnectTimeout(connectTimeout);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
