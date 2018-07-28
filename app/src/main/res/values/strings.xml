@@ -6,4 +6,6 @@
     <string name="author_holder">JustThe LongName</string>
     <string name="no_news">No news found right now. Probably something WRONG !</string>
     <string name="no_internet_connection">No internet connection.</string>
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">News Settings</string>
 </resources>
