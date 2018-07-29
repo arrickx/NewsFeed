@@ -7,5 +7,15 @@
     <string name="no_news">No news found right now. Probably something WRONG !</string>
     <string name="no_internet_connection">No internet connection.</string>
     <string name="settings_menu_item">Settings</string>
-    <string name="settings_title">News Settings</string>
+    <string name="settings_title">News Feed Settings</string>
+    <string name="settings_order_by_label">Order By</string>
+    <string name="settings_order_by_key" translatable="false">order_by</string>
+    <string name="settings_order_by_default">@string/settings_order_by_newest_value</string>
+    <string name="settings_order_by_newest_label">Newest</string>
+    <string name="settings_order_by_newest_value" translatable="false">newest</string>
+    <string name="settings_order_by_oldest_label">Oldest</string>
+    <string name="settings_order_by_oldest_value" translatable="false">oldest</string>
+    <string name="settings_page_size_label">Number of News</string>
+    <string name="settings_page_size_key" translatable="false">page_size</string>
+    <string name="settings_page_size_default" translatable="false">10</string>
 </resources>

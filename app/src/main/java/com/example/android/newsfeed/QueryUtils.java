@@ -179,7 +179,10 @@ public final class QueryUtils {
 
                     // Extract the value from the key call "tags"
                     JSONArray newsTag = currentNews.getJSONArray("tags");
-                    String author = null;
+
+                    // Declare a string call author for the news item
+                    String author;
+
                     // If the JsonArray is not empty, find the JsonObject at index 0;
                     if (newsTag != null && newsTag.length() > 0 ) {
                         JSONObject innerTag = newsTag.getJSONObject(0);
