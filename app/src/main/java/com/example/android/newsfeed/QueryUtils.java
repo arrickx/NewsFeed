@@ -176,12 +176,20 @@ public final class QueryUtils {
                     // Extract the value for the URL from the key called "webUrl"
                     String url = currentNews.getString("webUrl");
 
-                    // Get into a JsonArray and select find the JsonObject at index 0;
-                    JSONArray newsTag = currentNews.getJSONArray("tags");
-                    JSONObject innerTag = newsTag.getJSONObject(0);
 
-                    // Extract the value for the author from the key called "webTitle"
-                    String author = innerTag.getString("webTitle");
+                    // Extract the value from the key call "tags"
+                    JSONArray newsTag = currentNews.getJSONArray("tags");
+                    String author = null;
+                    // If the JsonArray is not empty, find the JsonObject at index 0;
+                    if (newsTag != null && newsTag.length() > 0 ) {
+                        JSONObject innerTag = newsTag.getJSONObject(0);
+
+                        // Extract the value for the author from the key called "webTitle"
+                        author = innerTag.getString("webTitle");
+                    } else {
+                        // Otherwise just call the author Anonymous;
+                        author = "Anonymous";
+                    }
 
                     // Create a new {@link News} object with the title, section, time, author
                     // and url from the JSON response.

@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     /**
      * URL for news data from the Guardian API
      */
-    private static final String NEWS_REQUEST_URL = "https://content.guardianapis.com/search?&show-tags=contributor&api-key="+apiKey;
+    private static final String NEWS_REQUEST_URL = "https://content.guardianapis.com/search";
 
     /**
      * Constant value for the news loader ID. We can choose any integer.
@@ -119,8 +119,16 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
+
+        Uri baseUri = Uri.parse(NEWS_REQUEST_URL);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        uriBuilder.appendQueryParameter("api-key", apiKey);
+        uriBuilder.appendQueryParameter("show-tags", "contributor");
+        uriBuilder.appendQueryParameter("page-size", "50");
+
         // Create a new loader for the given URL
-        return new NewsLoader(this, NEWS_REQUEST_URL);
+        return new NewsLoader(this, uriBuilder.toString());
     }
 
     @Override
@@ -149,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     }
 
     @Override
-    // This method initialize the contents of the Activity's options menu.
+    // Initialize the contents of the Activity's options menu.
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the Options Menu we specified in XML
         getMenuInflater().inflate(R.menu.main, menu);
@@ -157,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     }
 
     @Override
+    // Open the settings item once selected.
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
