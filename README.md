@@ -1,5 +1,6 @@
 # News Feed App
 > A single page app that gives a user regularly-updated news from the internet related to a particular topic, person, or location. Can access more detail by clicking the item.
+> Now able to change the setting of the app. You can change how the news order (from newest or oldest) and how many news to show on the app (from 1 to 50).
 
 
 [![Image](demo.gif)](Image)
